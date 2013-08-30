@@ -80,6 +80,7 @@ namespace Td {
 				/* If the setting for "show-completed" changes
 				 * we want the treeview to be re-filtered */
 				tasks_model_filter.refilter();
+				update_global_tags();
 			});
 		}
 
@@ -246,10 +247,10 @@ namespace Td {
 			var delete_task_menu_item = new Gtk.MenuItem.with_label(_("Delete task"));
 			edit_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F2, 0, Gtk.AccelFlags.VISIBLE);
 			delete_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.Delete, 0, Gtk.AccelFlags.VISIBLE);
-			window.search_entry.add_accelerator("activate", accel_group, Gdk.Key.F, Gdk.ModifierType.CONTROL_MASK, 0);
-
 			edit_task_menu_item.activate.connect(edit_task);
 			delete_task_menu_item.activate.connect(delete_task);
+
+			window.search_entry.add_accelerator("activate", accel_group, Gdk.Key.F, Gdk.ModifierType.CONTROL_MASK, 0);
 			window.search_entry.activate.connect( () => {
 				window.search_entry.has_focus = true;
 			});
@@ -437,10 +438,12 @@ namespace Td {
 		private Task get_selected_task(){
 			TreeIter iter;
 			Gtk.TreeModel model;
-			Task task;
+			Task task = null;
 			var sel = window.tree_view.get_selection();
-			sel.get_selected(out model, out iter);
-			model.get(iter, Columns.TASK_OBJECT, out task, -1);
+
+			if (sel.get_selected(out model, out iter) == true){
+				model.get(iter, Columns.TASK_OBJECT, out task, -1);
+			}
 			return task;
 		}
 
@@ -459,21 +462,24 @@ namespace Td {
 		private void edit_task(){
 			Task task = get_selected_task();
 
-			var dialog = add_edit_dialog();
-			dialog.show_all();
-			int response = dialog.run();
-			switch (response){
-				case Gtk.ResponseType.ACCEPT:
-					task.parse_from_string(dialog.entry.get_text());
-					task.to_model(tasks_list_store, task.iter);
-					todo_file.lines[task.linenr - 1] = task.to_string();
-					todo_file.write_file();
-					break;
-				default:
-					break;
+			if (task != null){
+
+				var dialog = add_edit_dialog();
+				dialog.show_all();
+				int response = dialog.run();
+				switch (response){
+					case Gtk.ResponseType.ACCEPT:
+						task.parse_from_string(dialog.entry.get_text());
+						task.to_model(tasks_list_store, task.iter);
+						todo_file.lines[task.linenr - 1] = task.to_string();
+						todo_file.write_file();
+						break;
+					default:
+						break;
+				}
+				update_global_tags();
+				dialog.destroy();
 			}
-			update_global_tags();
-			dialog.destroy();
 		}
 
 
@@ -516,10 +522,13 @@ namespace Td {
 		}
 
 		private void delete_task () {
+
 			Task task = get_selected_task ();
-			todo_file.lines.remove_at (task.linenr -1);
-			todo_file.write_file ();
-			tasks_list_store.remove (task.iter);
+			if (task != null) {
+				todo_file.lines.remove_at (task.linenr -1);
+				todo_file.write_file ();
+				tasks_list_store.remove (task.iter);
+			}
 		}
 
 		/**
