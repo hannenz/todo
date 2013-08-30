@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Todo
+GenericName=Todo.txt client
+Comment=Todo.txt client for elementary OS
+Categories=GTK;Utility;
+Exec=todo
+Icon=todo
+Terminal=false
+Type=Application
+X-GNOME-Gettext-Domain=todo

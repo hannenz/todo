@@ -1,0 +1,1 @@
+/usr/bin/gcc      CMakeFiles/todo.dir/src/main.c.o CMakeFiles/todo.dir/src/todo.c.o CMakeFiles/todo.dir/src/task.c.o  -o todo -rdynamic -lgtk-3 -lgdk-3 -latk-1.0 -lgio-2.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo-gobject -lpango-1.0 -lcairo -lgobject-2.0 -lglib-2.0 

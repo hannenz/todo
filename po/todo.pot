@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-26 11:38+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/todo_window.vala:27
+msgid "Add task"
+msgstr ""
+
+#: src/todo_window.vala:51
+msgid "All"
+msgstr ""
+
+#: src/todo_window.vala:50
+msgid "Contexts"
+msgstr ""
+
+#: src/todo.vala:197
+msgid "Delete task"
+msgstr ""
+
+#: src/todo_window.vala:88
+msgid "Done"
+msgstr ""
+
+#: src/todo.vala:196
+msgid "Edit task"
+msgstr ""
+
+#: src/todo_window.vala:29
+msgid "Learn more about todo.txt"
+msgstr ""
+
+#: src/todo_window.vala:28
+msgid "Open file"
+msgstr ""
+
+#: src/todo_window.vala:93
+msgid "Priority"
+msgstr ""
+
+#: src/todo_window.vala:49
+msgid "Projects"
+msgstr ""
+
+#: src/todo_window.vala:41
+msgid "Search"
+msgstr ""
+
+#: src/todo.vala:255
+msgid "Select your todo.txt file"
+msgstr ""
+
+#: src/todo_window.vala:27
+msgid "Start a new todo.txt file by adding a task"
+msgstr ""
+
+#: src/todo_window.vala:98
+msgid "Task"
+msgstr ""
+
+#: src/todo_window.vala:26
+msgid "The elementary todo.txt app"
+msgstr ""
+
+#: src/todo.vala:49
+msgid "Todo.txt client for elementary OS"
+msgstr ""
+
+#: src/todo_window.vala:28
+msgid "Use an existing todo.txt file"
+msgstr ""
+
+#: src/todo_window.vala:29
+msgid "What is a todo.txt file?"
+msgstr ""

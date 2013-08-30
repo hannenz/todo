@@ -1,0 +1,13 @@
+Source: todo
+Section: x11
+Priority: extra
+Maintainer: Johannes Braun <me@hannenz.de>
+Build-Depends: cmake (>= 2.8),
+               debhelper (>= 8.0.0),
+               valac-0.16 | valac (>= 0.16)
+Standards-Version: 3.9.3
+
+Package: todo
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Todo.txt app for elementary OS

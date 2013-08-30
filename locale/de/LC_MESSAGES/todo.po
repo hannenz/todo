@@ -1,0 +1,90 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Johannes Braun <me@hannenz.de>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: todo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-26 11:38+0200\n"
+"PO-Revision-Date: 2013-08-26 11:40+0200\n"
+"Last-Translator: Johannes Braun <me@hannenz.de>\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/todo_window.vala:27
+msgid "Add task"
+msgstr "Neue Aufgabe"
+
+#: src/todo_window.vala:51
+msgid "All"
+msgstr "Alle"
+
+#: src/todo_window.vala:50
+msgid "Contexts"
+msgstr "Kontexte"
+
+#: src/todo.vala:197
+msgid "Delete task"
+msgstr "Aufgabe löschen"
+
+#: src/todo_window.vala:88
+msgid "Done"
+msgstr "Erledigt"
+
+#: src/todo.vala:196
+msgid "Edit task"
+msgstr "Aufgabe bearbeiten"
+
+#: src/todo_window.vala:29
+msgid "Learn more about todo.txt"
+msgstr "Mehr über todo.txt erfahren"
+
+#: src/todo_window.vala:28
+msgid "Open file"
+msgstr "Datei öffnen"
+
+#: src/todo_window.vala:93
+msgid "Priority"
+msgstr "Priorität"
+
+#: src/todo_window.vala:49
+msgid "Projects"
+msgstr "Projekte"
+
+#: src/todo_window.vala:41
+msgid "Search"
+msgstr "Suche"
+
+#: src/todo.vala:255
+msgid "Select your todo.txt file"
+msgstr "Wähle deine todo.txt Datei"
+
+#: src/todo_window.vala:27
+msgid "Start a new todo.txt file by adding a task"
+msgstr "Eine neue todo.txt Datei anlegen, indem du einen Aufgabe anlegst"
+
+#: src/todo_window.vala:98
+msgid "Task"
+msgstr "Aufgabe"
+
+#: src/todo_window.vala:26
+msgid "The elementary todo.txt app"
+msgstr "Die elementare todo.txt Anwendung"
+
+#: src/todo.vala:49
+msgid "Todo.txt client for elementary OS"
+msgstr "Ein todo.txt client für elementary OS"
+
+#: src/todo_window.vala:28
+msgid "Use an existing todo.txt file"
+msgstr "Eine existierende todo.txt Datei benutzen"
+
+#: src/todo_window.vala:29
+msgid "What is a todo.txt file?"
+msgstr "Was ist eine todo.txt Datei?"
