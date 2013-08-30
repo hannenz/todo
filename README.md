@@ -1,6 +1,6 @@
 # todo
 
-This is a (todo.txt)[http://todotxt.com] app for elementary OS (it is using elementary's granite library so it wont run on ubunto or other distros)
+This is a [todo.txt](http://todotxt.com) app for elementary OS (it is using elementary's granite library so it wont run on ubunto or other distros)
 
 # Build
 
