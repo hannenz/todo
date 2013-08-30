@@ -1,7 +1,8 @@
 # todo
 
-This is a [todo.txt](http://todotxt.com) app for [elementary OS](http://elementaryos.org)
-It is using elementary's granite library so it won't run on ubuntu or other distros
+This is a [todo.txt](http://todotxt.com) app for [elementary OS](http://elementaryos.org).
+
+It is using elementary's granite library so it won't run on ubuntu or other distros.
 
 ## Build
 
@@ -14,7 +15,7 @@ $ make
 ```
 ## Use
 
-After `todo` has been prperly installed it is available from the applications menu (`slingshot`). Alternatively launch todo from the command line. Open up a terminal window and type
+After `todo` has been properly installed it is available from the applications menu (`slingshot`). Alternatively launch todo from the command line. Open up a terminal window and type
 
 ```
 $ todo [file]

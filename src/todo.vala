@@ -192,9 +192,14 @@ namespace Td {
 				todo_file.write_file();
 			});
 
-			read_file(null);
-			window.welcome.hide();
-			window.tree_view.show();
+			if (read_file(null)){
+				window.welcome.hide();
+				window.tree_view.show();
+			}
+			else {
+				window.welcome.show();
+				window.tree_view.hide();
+			}
 			tasks_model_filter.refilter();
 		}
 
@@ -218,6 +223,7 @@ namespace Td {
 				sc = !sc;
 				settings.set_boolean("show-completed", sc);
 				tasks_model_filter.refilter();
+				update_global_tags();
 			});
 
 			menu.append(show_completed_menu_item);
@@ -240,9 +246,13 @@ namespace Td {
 			var delete_task_menu_item = new Gtk.MenuItem.with_label(_("Delete task"));
 			edit_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F2, 0, Gtk.AccelFlags.VISIBLE);
 			delete_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.Delete, 0, Gtk.AccelFlags.VISIBLE);
+			window.search_entry.add_accelerator("activate", accel_group, Gdk.Key.F, Gdk.ModifierType.CONTROL_MASK, 0);
 
 			edit_task_menu_item.activate.connect(edit_task);
 			delete_task_menu_item.activate.connect(delete_task);
+			window.search_entry.activate.connect( () => {
+				window.search_entry.has_focus = true;
+			});
 
 			popup_menu.append(edit_task_menu_item);
 			popup_menu.append(delete_task_menu_item);
@@ -308,6 +318,10 @@ namespace Td {
 
 			if (dialog.run() == Gtk.ResponseType.ACCEPT){
 
+				read_file(dialog.get_filename());
+				window.welcome.hide();
+				window.tree_view.show();
+
 			}
 			dialog.destroy();
 			return true;
@@ -320,21 +334,27 @@ namespace Td {
 			window.projects_category.clear();
 			window.contexts_category.clear();
 
+			bool show_completed = settings.get_boolean("show-completed");
+
 			tasks_list_store.foreach( (model, path, iter) => {
+
 
 				Task task;
 				model.get(iter, Columns.TASK_OBJECT, out task, -1);
 
-				foreach (string context in task.contexts ){
-					var ctx = context.splice(0, 1);
-					if(!is_in_list(contexts, ctx)){
-						contexts.append(ctx);
+				if (task.done || show_completed){
+
+					foreach (string context in task.contexts ){
+						var ctx = context.splice(0, 1);
+						if(!is_in_list(contexts, ctx)){
+							contexts.append(ctx);
+						}
 					}
-				}
-				foreach (string project in task.projects){
-					var prj = project.splice(0, 1);
-					if(!is_in_list(projects, prj)){
-						projects.append(prj);
+					foreach (string project in task.projects){
+						var prj = project.splice(0, 1);
+						if(!is_in_list(projects, prj)){
+							projects.append(prj);
+						}
 					}
 				}
 
