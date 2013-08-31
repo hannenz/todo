@@ -77,12 +77,7 @@ namespace Td {
 				 * to re-read it */
 				read_file(null);
 			});
-			settings.changed["show-completed"].connect( (key) => {
-				/* If the setting for "show-completed" changes
-				 * we want the treeview to be re-filtered */
-				tasks_model_filter.refilter();
-				update_global_tags();
-			});
+			settings.changed["show-completed"].connect( toggle_show_completed);
 			settings.changed["show-statusbar"].connect( (key) => {
 				if (settings.get_boolean(key)){
 					window.statusbar.show();
@@ -225,6 +220,35 @@ namespace Td {
 			}
 		}
 
+		private void toggle_show_completed(){
+			debug ("toggle_show_completed()");
+
+			Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
+
+			tasks_model_filter.refilter();
+			update_global_tags();
+
+			bool flag = false;
+			if (selected_item != null){
+				foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
+					if (item.name == selected_item.name){
+						flag = true;
+						window.sidebar.selected = item;
+						break;
+					}
+				}
+				if (!flag){
+					foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
+						if (item.name == selected_item.name){
+							flag = true;
+							window.sidebar.selected = item;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		private void setup_menus(){
 			
 			var accel_group = new Gtk.AccelGroup();
@@ -233,33 +257,10 @@ namespace Td {
 			var show_completed_menu_item = new Gtk.CheckMenuItem.with_label("Show Completed");
 			show_completed_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F3, 0, Gtk.AccelFlags.VISIBLE);
 			show_completed_menu_item.activate.connect( () => {
-				Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
-
 				bool sc = settings.get_boolean("show-completed");
 				sc = !sc;
 				settings.set_boolean("show-completed", sc);
-				tasks_model_filter.refilter();
-				update_global_tags();
-
-				bool flag = false;
-				if (selected_item != null){
-					foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
-						if (item.name == selected_item.name){
-							flag = true;
-							window.sidebar.selected = item;
-							break;
-						}
-					}
-					if (!flag){
-						foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
-							if (item.name == selected_item.name){
-								flag = true;
-								window.sidebar.selected = item;
-								break;
-							}
-						}
-					}
-				}
+				// toggle_show_completed gets called automatically since it is connected to the change-signal
 			});
 			var show_statusbar_menu_item = new Gtk.CheckMenuItem.with_label("Statusbar");
 			show_statusbar_menu_item.activate.connect ( () => {
