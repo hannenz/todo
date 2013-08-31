@@ -53,6 +53,7 @@ namespace Td {
 		 	about_comments	= _("Todo.txt client for elementary OS");
 		 	about_license_type = Gtk.License.GPL_3_0;
 		}
+
 		public Todo() {
 
 			Intl.setlocale(LocaleCategory.MESSAGES, "");
@@ -81,6 +82,14 @@ namespace Td {
 				 * we want the treeview to be re-filtered */
 				tasks_model_filter.refilter();
 				update_global_tags();
+			});
+			settings.changed["show-statusbar"].connect( (key) => {
+				if (settings.get_boolean(key)){
+					window.statusbar.show();
+				}
+				else {
+					window.statusbar.hide();
+				}
 			});
 		}
 
@@ -202,6 +211,10 @@ namespace Td {
 				window.tree_view.hide();
 			}
 			tasks_model_filter.refilter();
+
+			if (settings.get_boolean("show-statusbar") == false){
+				window.statusbar.hide();
+			}
 		}
 
 		protected override void open (File[] files, string hint){
@@ -226,8 +239,21 @@ namespace Td {
 				tasks_model_filter.refilter();
 				update_global_tags();
 			});
+			var show_statusbar_menu_item = new Gtk.CheckMenuItem.with_label("Statusbar");
+			show_statusbar_menu_item.activate.connect ( () => {
+				bool s = settings.get_boolean("show-statusbar");
+				settings.set_boolean("show-statusbar", !s);
+				if (!s){
+					window.statusbar.show();
+				}
+				else {
+					window.statusbar.hide();
+				}
+
+			});
 
 			menu.append(show_completed_menu_item);
+			menu.append(show_statusbar_menu_item);
 
 			var main_menu = this.create_appmenu(menu);
 			main_menu.margin_left = 12;
@@ -567,7 +593,8 @@ namespace Td {
 					var test_file = new TodoFile(path);
 					if (test_file.exists()){
 						todo_file = test_file;
-						window.title = "Todo (%s)".printf (path);
+//						window.title = "Todo (%s)".printf (path);
+						window.statusbar.push(1, path);
 						break;
 					}
 				}

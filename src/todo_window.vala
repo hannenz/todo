@@ -13,6 +13,7 @@ namespace Td {
 		public Granite.Widgets.Welcome welcome;
 		public Gtk.TreeView tree_view;
 		public Gtk.CellRendererToggle cell_renderer_toggle;
+		public Gtk.Statusbar statusbar;
 
 		construct {
 			title = "Todo";
@@ -75,6 +76,9 @@ namespace Td {
 			vbox.pack_start(info_bar_box, false, false, 0);
 
 			vbox.pack_start(sidebar_paned, true, true, 0);
+
+			statusbar = new Statusbar();
+			vbox.pack_start(statusbar, false, false, 0);
 
 			add(vbox);
 			show_all();
