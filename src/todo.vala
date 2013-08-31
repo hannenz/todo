@@ -233,11 +233,33 @@ namespace Td {
 			var show_completed_menu_item = new Gtk.CheckMenuItem.with_label("Show Completed");
 			show_completed_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F3, 0, Gtk.AccelFlags.VISIBLE);
 			show_completed_menu_item.activate.connect( () => {
+				Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
+
 				bool sc = settings.get_boolean("show-completed");
 				sc = !sc;
 				settings.set_boolean("show-completed", sc);
 				tasks_model_filter.refilter();
 				update_global_tags();
+
+				bool flag = false;
+				if (selected_item != null){
+					foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
+						if (item.name == selected_item.name){
+							flag = true;
+							window.sidebar.selected = item;
+							break;
+						}
+					}
+					if (!flag){
+						foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
+							if (item.name == selected_item.name){
+								flag = true;
+								window.sidebar.selected = item;
+								break;
+							}
+						}
+					}
+				}
 			});
 			var show_statusbar_menu_item = new Gtk.CheckMenuItem.with_label("Statusbar");
 			show_statusbar_menu_item.activate.connect ( () => {
@@ -369,19 +391,20 @@ namespace Td {
 				Task task;
 				model.get(iter, Columns.TASK_OBJECT, out task, -1);
 
-				if (task.done || show_completed){
+				if (!show_completed && task.done){
+					return false;
+				}
 
-					foreach (string context in task.contexts ){
-						var ctx = context.splice(0, 1);
-						if(!is_in_list(contexts, ctx)){
-							contexts.append(ctx);
-						}
+				foreach (string context in task.contexts ){
+					var ctx = context.splice(0, 1);
+					if(!is_in_list(contexts, ctx)){
+						contexts.append(ctx);
 					}
-					foreach (string project in task.projects){
-						var prj = project.splice(0, 1);
-						if(!is_in_list(projects, prj)){
-							projects.append(prj);
-						}
+				}
+				foreach (string project in task.projects){
+					var prj = project.splice(0, 1);
+					if(!is_in_list(projects, prj)){
+						projects.append(prj);
 					}
 				}
 
@@ -393,8 +416,12 @@ namespace Td {
 				var item = new Granite.Widgets.SourceList.Item(context);
 				int count = 0;
 				tasks_list_store.foreach( (model, path, iter) => {
+
 					Task task;
 					model.get(iter, Columns.TASK_OBJECT, out task, -1);
+					if (!show_completed && task.done){
+						return false;
+					}
 					if (is_in_list(task.contexts, "@"+context)){
 						count ++;
 					}
@@ -410,6 +437,9 @@ namespace Td {
 				tasks_list_store.foreach( (model, path, iter) => {
 					Task task;
 					model.get(iter, Columns.TASK_OBJECT, out task,-1);
+					if (!show_completed && task.done){
+						return false;
+					}
 					if (is_in_list(task.projects, "+"+project)){
 						count++;
 					}
