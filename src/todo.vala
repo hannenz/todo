@@ -519,9 +519,13 @@ namespace Td {
 		private void edit_task(){
 			Task task = get_selected_task();
 
+
 			if (task != null){
 
 				var dialog = add_edit_dialog();
+
+				dialog.entry.set_text(task.to_string());
+
 				dialog.show_all();
 				int response = dialog.run();
 				switch (response){
@@ -614,6 +618,7 @@ namespace Td {
 				string[] paths = {
 					settings.get_string("todo-txt-file-path"),
 					Environment.get_home_dir() + DS + "todo.txt",
+					Environment.get_home_dir() + DS + "bin" + DS + "todo.txt" + DS + "todo.txt",
 					Environment.get_home_dir() + DS + "Dropbox" + DS + "todo.txt",
 					Environment.get_home_dir() + DS + "Dropbox" + DS + "todo" + DS + "todo.txt"
 				};

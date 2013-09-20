@@ -35,6 +35,9 @@ namespace Td {
 			string match1;
 			string str = s;
 
+			projects = new List<string>();
+			contexts = new List<string>();
+
 			try {
 				var re = new Regex("@[a-zA-Z0-9-_]+");
 				while (re.match(str, 0, out mi)){
