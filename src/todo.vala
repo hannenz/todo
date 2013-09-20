@@ -321,7 +321,6 @@ namespace Td {
 
 			this.window.reset();
 			tasks_list_store.clear();
-
 		}
 
 		/**
@@ -642,18 +641,6 @@ namespace Td {
 			}
 
 			todo_file.monitor.changed.connect( (file, other_file, event) => {
-
-/*				switch (event){
-					case FileMonitorEvent.CHANGED:				debug ("CHANGED"); break;
-					case FileMonitorEvent.CHANGES_DONE_HINT:	debug ("CHANGES_DONE_HINT"); break;
-					case FileMonitorEvent.DELETED:				debug ("DELETED"); break;
-					case FileMonitorEvent.CREATED:				debug ("CREATED"); break;
-					case FileMonitorEvent.ATTRIBUTE_CHANGED:	debug ("ATTR CHANGED"); break;
-					case FileMonitorEvent.PRE_UNMOUNT:			debug ("PRE_UNMOUNT"); break;
-					case FileMonitorEvent.UNMOUNTED:			debug ("UNMOUNTED"); break;
-					case FileMonitorEvent.MOVED:				debug ("MOVED"); break;
-				}
-*/
 
 				if (event == FileMonitorEvent.CHANGES_DONE_HINT){
 					debug ("--- The todo.txt file has been changed! ---");
