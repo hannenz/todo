@@ -118,6 +118,7 @@ namespace Td {
 			});
 
 			/* On add button clicked, show add task dialog */
+			window.open_button.clicked.connect(open_file);
 			window.add_button.clicked.connect(add_task);
 
 			/* Detect right click on tree view columns and show popup context menu (edit/ delete) */
@@ -282,6 +283,7 @@ namespace Td {
 			main_menu.margin_left = 12;
 			window.toolbar.insert (main_menu, -1);
 
+			window.open_button.add_accelerator("clicked", accel_group, Gdk.Key.O, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 			window.add_button.add_accelerator("clicked", accel_group, Gdk.Key.N, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 
 			window.add_accel_group(accel_group);
@@ -352,6 +354,10 @@ namespace Td {
 			tasks_model_sort.set_sort_column_id(Columns.PRIORITY, Gtk.SortType.ASCENDING);
 		}
 
+		private void open_file(){
+			select_file();
+		}
+
 		private bool select_file(){
 			var dialog = new FileChooserDialog(
 				_("Select your todo.txt file"),
@@ -363,7 +369,7 @@ namespace Td {
 
 			Gtk.FileFilter filter = new FileFilter();
 			dialog.set_filter(filter);
-			filter.add_pattern("todo.txt");
+			filter.add_pattern("*todo.txt");
 
 			if (dialog.run() == Gtk.ResponseType.ACCEPT){
 
@@ -609,6 +615,9 @@ namespace Td {
 			/* Always restore "empty" state before (re)reading the file */
 			reset();
 
+
+			//debug ("%s".printf(filename));
+
 			if (filename != null){
 				todo_file = new TodoFile(filename);
 			}
@@ -643,7 +652,6 @@ namespace Td {
 			todo_file.monitor.changed.connect( (file, other_file, event) => {
 
 				if (event == FileMonitorEvent.CHANGES_DONE_HINT){
-					debug ("--- The todo.txt file has been changed! ---");
 					var info_bar = new Gtk.InfoBar.with_buttons(Gtk.Stock.OK, Gtk.ResponseType.ACCEPT);
 					info_bar.set_message_type(Gtk.MessageType.WARNING);
 					var content = info_bar.get_content_area();

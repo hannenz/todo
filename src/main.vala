@@ -40,7 +40,6 @@ static int main(string[] args){
 
 	Gtk.init(ref args);
 
-
 	var app = new Todo();
 	ret = app.run(args);
 
