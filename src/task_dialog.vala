@@ -18,7 +18,7 @@ namespace Td {
 
 		private Gtk.ButtonBox bbox1;
 		private Gtk.ButtonBox bbox2;
-
+		private Gtk.ButtonBox bbox3;
 
 		public TaskDialog() {
 
@@ -26,6 +26,7 @@ namespace Td {
 			var content_area = this.get_content_area();
 			bbox1 = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
 			bbox2 = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
+			bbox3 = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
 			
 			this.set_default_size(460, -1);
 
@@ -35,6 +36,8 @@ namespace Td {
 			content_area.pack_start(bbox1, false, false, 0);
 			content_area.pack_start(new Label(_("Contexts")), false, false, 0);
 			content_area.pack_start(bbox2, false, false, 0);
+			content_area.pack_start(new Label(_("Priority")), false, false, 0);
+			content_area.pack_start(bbox3, false, false, 0);
 
 			entry.has_focus = true;
 
@@ -56,6 +59,37 @@ namespace Td {
 				this.response(Gtk.ResponseType.ACCEPT);
 
 			});
+
+			var button = new Button.with_label("A");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+			button = new Button.with_label("B");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+			button = new Button.with_label("C");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+			button = new Button.with_label("D");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+			button = new Button.with_label("E");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+			button = new Button.with_label("F");
+			bbox3.add(button);
+			button.clicked.connect(on_priority_button_clicked);
+		}
+
+		private void on_priority_button_clicked (Button button) {
+			try {
+				MatchInfo mi;
+				Regex re = new Regex("(\\([A-Z]\\) )");
+				string new_text = re.replace(this.entry.text, -1, 0, "", 0);
+				this.entry.text = "(%s) %s".printf(button.label, new_text);
+			}
+			catch (Error e){
+				warning(e.message);
+			}
 		}
 
 		public void add_project_button(string button_text){
@@ -69,7 +103,6 @@ namespace Td {
 			bbox1.add(button);
 			button.clicked.connect(on_button_clicked);
 		}
-
 
 		public void add_context_button(string button_text){
 
