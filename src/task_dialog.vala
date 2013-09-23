@@ -1,3 +1,10 @@
+/**
+ * @class TaskDialog
+ *
+ * @author Johannes Braun <me@hannenz.de>
+ * @package todo
+ */
+
 using Gtk;
 
 namespace Td {
@@ -60,11 +67,9 @@ namespace Td {
 			var button = new Button();
 			button.set_label("+" + button_text);
 			bbox1.add(button);
-			button.clicked.connect( () => {
-
-
-			});
+			button.clicked.connect(on_button_clicked);
 		}
+
 
 		public void add_context_button(string button_text){
 
@@ -74,10 +79,14 @@ namespace Td {
 
 			var button = new Button();
 			button.set_label("@" + button_text);
-			button.clicked.connect( () => {
-
-			});
+			button.clicked.connect(on_button_clicked);
 			bbox2.add(button);
+		}
+
+		public void on_button_clicked(Button button){
+			this.entry.set_text(
+				this.entry.text + " " + button.label
+			);
 		}
 
 		private bool on_match_selected(TreeModel model, TreeIter iter){

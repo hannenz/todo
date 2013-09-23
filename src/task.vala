@@ -1,3 +1,11 @@
+/**
+ * @class Task
+ *
+ * @author Johannes Braun <me@hannenz.de>
+ * @package todo
+ *
+ */
+
 using Gtk;
 using Td;
 
@@ -144,7 +152,14 @@ namespace Td {
 				prj += " ";
 			}
 
-			string markup = GLib.Markup.printf_escaped("<b>%s</b><small><i>%s %s</i></small>\n<small><i>%s</i></small>", this.text, prj, ctx, nice_date(this.date));
+			string markup = GLib.Markup.printf_escaped(
+				"<b>%s</b><small><i>%s %s</i></small>\n<small><i><span foreground=\"#a8a9aa\">%s</span></i></small>",
+				this.text,
+				prj,
+				ctx, 
+				nice_date(this.date, 0)
+			);
+
 			if (this.done)
 				markup = "<s>" + markup + "</s>";
 
@@ -162,31 +177,62 @@ namespace Td {
 				Columns.VISIBLE, true,
 				Columns.DONE, this.done
 			);
-
 		}
 
-		public string nice_date(string date_string){
+		/**
+		 * nice_date
+		 * 
+		 * returns a nicely formatted string, telling how many days have passed
+		 * since the date_string (Y-m-d), e.g. returns "17 days ago"
+		 * If the date is more than max days ago, it will return a locale formatted
+		 * string of the date
+		 * 
+		 * @param date_string string 		The Y-m-d formatted date to be processed
+		 * @param max_days int optional		If date is more than max_days old, the 
+		 *									date will be returned as locale formatted
+		 *									date string (default=30, pass <= 0 for default)
+		 * @return string 					The formatted date as string
+		 */
+		public string nice_date(string date_string, int max_days){
 
-			return date_string;
-/*			string nice = "";
+			if (max_days <= 0){
+				max_days = 30;
+			}
+
 			try {
-				var date = new DateTime();
-				date.set_parse(date_string);
-				if (!date.valid()){
-				//	throw new GLib.Error("Invalid date");
+				MatchInfo match_info;
+				var re = new Regex("([0-9]{4})-([0-9]{2})-([0-9]{2})");
+				if (re.match(date_string, 0, out match_info)){
+
+					DateYear year =	(DateYear)int.parse(match_info.fetch(1));
+					DateMonth month = (DateMonth)int.parse(match_info.fetch(2));
+					DateDay day = (DateDay)int.parse(match_info.fetch(3));
+
+					Date d = Date();
+					d.set_year(year);
+					d.set_month(month);
+					d.set_day(day);
+
+					time_t t_now;
+					time_t(out t_now);
+					Date now = Date();
+					now.set_time_t(t_now);
+
+					int diff = d.days_between(now);
+					if (diff < max_days){
+						return "%u days ago".printf(diff);
+					}
+					else {
+						char buf[100];
+						d.strftime(buf, "%x");
+						return (string)buf;
+					}
 				}
-				var now = new DateTime();
-				now.set_time_t(time_t(null));
-
-				nice = "%u".printf(now.difference(date));
-
 			}
 			catch (Error e){
-				warning ("%s\n", e.message);
+				warning (e.message);
 			}
-
-			return nice;
-*/		}
+			return date_string;
+		}
 	}
 }
-
