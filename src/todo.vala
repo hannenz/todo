@@ -144,6 +144,7 @@ namespace Td {
 					if (window.tree_view.get_path_at_pos((int)event.x, (int)event.y, out path, out column, out cell_x, out cell_y)){
 						tasks_model_sort.get_iter_from_string(out iter,path.to_string());
 						tasks_model_sort.get(iter, Columns.TASK_OBJECT, out task, -1);
+
 						popup_menu.popup(null, null, null, event.button, event.time);
 					}
 				}
@@ -234,7 +235,6 @@ namespace Td {
 		}
 
 		private void toggle_show_completed(){
-			debug ("toggle_show_completed()");
 
 			Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
 
@@ -308,21 +308,23 @@ namespace Td {
 			popup_menu.set_accel_group(accel_group_popup);
 			var edit_task_menu_item = new Gtk.MenuItem.with_label(_("Edit task"));
 			var delete_task_menu_item = new Gtk.MenuItem.with_label(_("Delete task"));
+			var toggle_done_menu_item = new Gtk.MenuItem.with_label(_("Toggle done"));
 			edit_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F2, 0, Gtk.AccelFlags.VISIBLE);
 			delete_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.Delete, 0, Gtk.AccelFlags.VISIBLE);
 			edit_task_menu_item.activate.connect(edit_task);
 			delete_task_menu_item.activate.connect(delete_task);
+			toggle_done_menu_item.activate.connect(toggle_done);
 
 			window.search_entry.add_accelerator("activate", accel_group, Gdk.Key.F, Gdk.ModifierType.CONTROL_MASK, 0);
 			window.search_entry.activate.connect( () => {
 				window.search_entry.has_focus = true;
 			});
 
+			popup_menu.append(toggle_done_menu_item);
 			popup_menu.append(edit_task_menu_item);
 			popup_menu.append(delete_task_menu_item);
 			popup_menu.show_all();
 		}
-
 
 		/**
 		 * reset
@@ -521,7 +523,7 @@ namespace Td {
 			return task;
 		}
 
-		private TaskDialog add_edit_dialog(){
+		private TaskDialog add_edit_dialog () {
 			var dialog = new TaskDialog();
 
 			foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
@@ -533,7 +535,19 @@ namespace Td {
 			return dialog;
 		}
 
-		private void edit_task(){
+		private void toggle_done () {
+			Task task = get_selected_task ();
+			if (task != null) {
+
+				task.done = !task.done;
+				task.to_model(tasks_list_store, task.iter);
+				tasks_model_filter.refilter();
+				todo_file.lines[task.linenr - 1] = task.to_string();
+				todo_file.write_file();
+			}
+		}
+
+		private void edit_task () {
 			Task task = get_selected_task();
 
 			if (task != null){
