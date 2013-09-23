@@ -1,3 +1,12 @@
+/*
+ * todo.vala
+ *
+ * Main application code
+ *
+ * @author Johannes Braun <j.braun@agentur-halma.de>
+ * @package todo
+ *
+ */
 using Gtk;
 using Td;
 
@@ -13,6 +22,8 @@ namespace Td {
 		VISIBLE,
 		DONE
 	}
+
+	/* Extend Granite.Application */
 
 	public class Todo : Granite.Application {
 
@@ -42,9 +53,9 @@ namespace Td {
 		 	program_name	= "Todo";
 		 	app_years		= "2013";
 		 	app_icon		= "todo";
-		 	main_url		= "todo.hannenz.de";
-		 	help_url		= "todo.hannenz.de/help";
-		 	bug_url			= "todo.hannenz.de/bugs";
+		 	main_url		= "https://github.com/hannenz/todo";
+		 	help_url		= "https://github.com/hannenz/todo/blob/master/README.md";
+		 	bug_url			= "https://github.com/hannenz/todo/issues";
 
 		 	about_authors	= {
 					 		"Johannes Braun <me@hannenz.de",
