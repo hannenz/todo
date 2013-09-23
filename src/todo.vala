@@ -207,6 +207,7 @@ namespace Td {
 				task.to_model(tasks_list_store, null);
 				todo_file.lines[task.linenr - 1] = task.to_string();
 				todo_file.write_file();
+				tasks_model_filter.refilter();
 			});
 
 			if (read_file(null)){
@@ -535,7 +536,6 @@ namespace Td {
 		private void edit_task(){
 			Task task = get_selected_task();
 
-
 			if (task != null){
 
 				var dialog = add_edit_dialog();
@@ -548,6 +548,7 @@ namespace Td {
 					case Gtk.ResponseType.ACCEPT:
 						task.parse_from_string(dialog.entry.get_text());
 						task.to_model(tasks_list_store, task.iter);
+						tasks_model_filter.refilter();
 						todo_file.lines[task.linenr - 1] = task.to_string();
 						todo_file.write_file();
 						break;
