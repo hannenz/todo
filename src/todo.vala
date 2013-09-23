@@ -47,6 +47,8 @@ namespace Td {
 		private string project_filter;
 		private string context_filter;
 
+		private Task trashed_task;
+
 		construct {
 			/* Set up the app */
 		 	application_id	= "todo.hannenz.de";
@@ -58,11 +60,13 @@ namespace Td {
 		 	bug_url			= "https://github.com/hannenz/todo/issues";
 
 		 	about_authors	= {
-					 		"Johannes Braun <me@hannenz.de",
+					 		"Johannes Braun <me@hannenz.de>",
 		 					null
 		 	};
 		 	about_comments	= _("Todo.txt client for elementary OS");
 		 	about_license_type = Gtk.License.GPL_3_0;
+
+		 	trashed_task = null;
 		}
 
 		public Todo() {
@@ -589,21 +593,14 @@ namespace Td {
 						TreeIter iter;
 						tasks_list_store.append(out iter);
 						task.to_model(tasks_list_store, iter);
+						tasks_model_filter.refilter();
 						if (todo_file.write_file()){
 							debug ("File has been successfully written");
 						}
 						else {
 							debug ("Failed to write file");
 						}
-
-/*						try {
-							FileOutputStream os = file.append_to(FileCreateFlags.NONE);
-							os.write(task.to_string().data);
-						}
-						catch (Error e){
-							error("Failed to write to todo.txt file: %s", e.message);
-						}
-*/					}
+					}
 					break;
 				default:
 					break;
@@ -616,11 +613,44 @@ namespace Td {
 		private void delete_task () {
 
 			Task task = get_selected_task ();
+
+			
 			if (task != null) {
+
+				trashed_task = task;
+
 				todo_file.lines.remove_at (task.linenr -1);
 				todo_file.write_file ();
 				tasks_list_store.remove (task.iter);
+
+				var info_bar = new Gtk.InfoBar.with_buttons(Gtk.Stock.UNDO, Gtk.ResponseType.ACCEPT);
+				info_bar.set_message_type(Gtk.MessageType.INFO);
+				var content = info_bar.get_content_area();
+				content.add(new Label(_("The task has been deleted")));
+				info_bar.show_all();
+				window.info_bar_box.pack_start(info_bar, true, true, 0);
+				info_bar.response.connect( () => {
+					undelete();
+					info_bar.destroy();
+				});
 			}
+		}
+
+		private void undelete () {
+
+			if (trashed_task != null){
+				print ("Restoring task: " + trashed_task.text + " at line nr. " + "%u".printf(trashed_task.linenr));
+
+				todo_file.lines.insert(trashed_task.linenr - 1, trashed_task.to_string());
+				todo_file.write_file();
+				TreeIter iter;
+				tasks_list_store.append(out iter);
+				trashed_task.to_model(tasks_list_store, iter);
+				tasks_model_filter.refilter();
+
+				trashed_task = null;
+			}
+
 		}
 
 		/**
