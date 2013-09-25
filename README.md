@@ -2,7 +2,7 @@
 
 This is a [todo.txt](http://todotxt.com) app for [elementary OS](http://elementaryos.org).
 
-It is using elementary's granite library so it won't run on ubuntu or other distros.
+It is using elementary's granite library.
 
 ## Build
 
