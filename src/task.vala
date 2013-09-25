@@ -123,7 +123,7 @@ namespace Td {
 			if (this.done){
 				str += "x ";
 			}
-			if (this.priority.length > 0){
+			if (this.priority != null && this.priority.length > 0){
 				str += "(%s)".printf(this.priority);
 				str += " ";
 			}
@@ -234,5 +234,6 @@ namespace Td {
 			}
 			return date_string;
 		}
+
 	}
 }

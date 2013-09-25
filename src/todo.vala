@@ -313,6 +313,37 @@ namespace Td {
 			var edit_task_menu_item = new Gtk.MenuItem.with_label(_("Edit task"));
 			var delete_task_menu_item = new Gtk.MenuItem.with_label(_("Delete task"));
 			var toggle_done_menu_item = new Gtk.MenuItem.with_label(_("Toggle done"));
+
+			var priority_menu = new Gtk.Menu();
+
+			var priority_menu_item = new Gtk.MenuItem.with_label(_("Priority"));
+			priority_menu_item.set_submenu(priority_menu);
+
+			var priority_none_menu_item = new Gtk.MenuItem.with_label(_("None"));
+			priority_menu.append(priority_none_menu_item);
+			priority_none_menu_item.add_accelerator("activate", accel_group, Gdk.Key.BackSpace, 0, Gtk.AccelFlags.VISIBLE);
+			priority_none_menu_item.activate.connect ( () => {
+				Task task = get_selected_task ();
+				if (task != null){
+					task.priority = "";
+					update_todo_file_after_task_edited (task);
+				}
+			});
+
+			for (char prio = 'A'; prio <= 'F'; prio++){
+				var priority_x_menu_item = new Gtk.MenuItem.with_label("%c".printf(prio));
+				priority_x_menu_item.add_accelerator("activate", accel_group, Gdk.Key.A + (prio - 'A'), 0, Gtk.AccelFlags.VISIBLE);
+				priority_x_menu_item.activate.connect( (menu_item) => {
+
+					Task task = get_selected_task();
+					if (task != null){
+						task.priority = menu_item.get_label ();
+						update_todo_file_after_task_edited (task);
+					}
+				});
+				priority_menu.append(priority_x_menu_item);
+			}
+
 			edit_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F2, 0, Gtk.AccelFlags.VISIBLE);
 			delete_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.Delete, 0, Gtk.AccelFlags.VISIBLE);
 			edit_task_menu_item.activate.connect(edit_task);
@@ -325,9 +356,22 @@ namespace Td {
 			});
 
 			popup_menu.append(toggle_done_menu_item);
+			popup_menu.append(priority_menu_item);
 			popup_menu.append(edit_task_menu_item);
 			popup_menu.append(delete_task_menu_item);
+
 			popup_menu.show_all();
+		}
+
+		private void update_todo_file_after_task_edited (Task task){
+
+			if (task != null){
+				tasks_model_filter.refilter ();
+				todo_file.lines[task.linenr - 1] = task.to_string ();
+				task.to_model(tasks_list_store, task.iter);
+				todo_file.write_file();
+			}
+
 		}
 
 		/**

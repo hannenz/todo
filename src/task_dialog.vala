@@ -82,7 +82,6 @@ namespace Td {
 
 		private void on_priority_button_clicked (Button button) {
 			try {
-				MatchInfo mi;
 				Regex re = new Regex("(\\([A-Z]\\) )");
 				string new_text = re.replace(this.entry.text, -1, 0, "", 0);
 				this.entry.text = "(%s) %s".printf(button.label, new_text);
