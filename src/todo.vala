@@ -125,11 +125,10 @@ namespace Td {
 
 			});
 
-			int w, h;
-			w = settings.get_int("saved-state-width");
-			h = settings.get_int("saved-state-height");
-
-			window.resize(w, h);
+			window.resize(
+				settings.get_int("saved-state-width"),
+				settings.get_int("saved-state-height")
+			);
 
 			/* Create and setup the data model, which
 			 * stores the tasks*/
@@ -292,7 +291,7 @@ namespace Td {
 			}
 		}
 
-		private void setup_menus(){
+		private void setup_menus () {
 			
 			var accel_group = new Gtk.AccelGroup();
 
@@ -372,6 +371,7 @@ namespace Td {
 
 			edit_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.F2, 0, Gtk.AccelFlags.VISIBLE);
 			delete_task_menu_item.add_accelerator("activate", accel_group, Gdk.Key.Delete, 0, Gtk.AccelFlags.VISIBLE);
+			toggle_done_menu_item.add_accelerator("activate", accel_group, Gdk.Key.space, 0, Gtk.AccelFlags.VISIBLE);
 			edit_task_menu_item.activate.connect(edit_task);
 			delete_task_menu_item.activate.connect(delete_task);
 			toggle_done_menu_item.activate.connect(toggle_done);
