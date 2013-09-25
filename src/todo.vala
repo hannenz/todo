@@ -49,6 +49,9 @@ namespace Td {
 
 		private Task trashed_task;
 
+		private int window_width;
+		private int window_height;
+
 		construct {
 			/* Set up the app */
 		 	application_id	= "todo.hannenz.de";
@@ -114,6 +117,20 @@ namespace Td {
 			/* Create & setup the application window */
 			window = new TodoWindow();
 
+			/* On window resize save current size for next time */
+			window.configure_event.connect ( () => {
+
+				window.get_size(out window_width, out window_height);
+				return false;
+
+			});
+
+			int w, h;
+			w = settings.get_int("saved-state-width");
+			h = settings.get_int("saved-state-height");
+
+			window.resize(w, h);
+
 			/* Create and setup the data model, which
 			 * stores the tasks*/
 			tasks_list_store = new ListStore (5, typeof (string), typeof(string), typeof(GLib.Object), typeof(bool), typeof(bool));
@@ -178,9 +195,18 @@ namespace Td {
 					}
 				}
 			});
-			window.delete_event.connect( () => {
+
+/*
+			window.delete_event.connect( (win) => {
+				window.hide();
+				return true;
+			});
+*/
+			window.destroy.connect( () => {
+				settings.set_int("saved-state-width", window_width);
+				settings.set_int("saved-state-height", window_height);
 				Gtk.main_quit();
-				return false;
+
 			});
 
 			window.welcome.activated.connect((index) => {
@@ -699,7 +725,6 @@ namespace Td {
 
 				trashed_task = null;
 			}
-
 		}
 
 		/**

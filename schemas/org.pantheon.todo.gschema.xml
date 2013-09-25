@@ -18,6 +18,17 @@
 			<summary>todotxt file path</summary>
 			<description>Path to the todotxt file to use</description>
 		</key>
+
+		<key type="i" name="saved-state-width">
+			<default>600</default>
+			<summary>Saved state width</summary>
+			<description>The size of the window is stored here when the application is closed to restore it on restart</description>
+		</key>
+		<key type="i" name="saved-state-height">
+			<default>800</default>
+			<summary>Saved state height</summary>
+			<description>The size of the window is stored here when the application is closed to restore it on restart</description>
+		</key>
 	</schema>
 </schemalist>
 
