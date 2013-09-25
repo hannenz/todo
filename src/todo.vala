@@ -672,6 +672,11 @@ namespace Td {
 				var content = info_bar.get_content_area();
 				content.add(new Label(_("The task has been deleted")));
 				info_bar.show_all();
+
+				window.info_bar_box.foreach( (child) => {
+					child.destroy();
+				});
+
 				window.info_bar_box.pack_start(info_bar, true, true, 0);
 				info_bar.response.connect( () => {
 					undelete();
