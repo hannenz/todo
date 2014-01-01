@@ -327,6 +327,7 @@ namespace Td {
 
 			window.open_button.add_accelerator("clicked", accel_group, Gdk.Key.O, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 			window.add_button.add_accelerator("clicked", accel_group, Gdk.Key.N, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
+			window.print_button.add_accelerator("clicked", accel_group, Gdk.Key.P, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 
 			window.add_accel_group(accel_group);
 			menu.set_accel_group(accel_group);
@@ -821,21 +822,42 @@ namespace Td {
 
 		void print_todo_list () {
 			Gtk.PrintOperation printop;
+			bool show_completed  = false;
+			Pango.Layout layout = null;
+			List<int> page_breaks = null;
 
 			printop = new Gtk.PrintOperation();
+			show_completed = settings.get_boolean("show-completed");
 
 			printop.begin_print.connect( (context) => {
+
+				string text = "";
+
+				tasks_list_store.foreach( (model, path, iter) => {
+					Task task;
+					model.get(iter, Columns.TASK_OBJECT, out task, -1);
+					if (!show_completed && task.done){
+						return false;
+					}
+
+					text += task.to_markup();
+					text += "\n";
+
+					return false;
+				});
+
+				print ("%s\n", text);
 
 				double width = context.get_width();
 				double height = context.get_height();
 
-				Pango.Layout layout = context.create_pango_layout();
-				layout.set_font_description(Pango.FontDescription.from_string("Sans 12"));
-				layout.set_width((int)width * Pango.SCALE);
-				layout.set_text("Hello, Print Test", 1);
+				layout = context.create_pango_layout();
+				layout.set_font_description(Pango.FontDescription.from_string("Sans 22"));
+				layout.set_width((int)(width * Pango.SCALE));
+				layout.set_markup(text, -1);
 
 				int num_lines = layout.get_line_count();
-				var page_breaks = new List<int>();
+				page_breaks = new List<int>();
 				double page_height = 0;
 
 				for (int line = 0; line < num_lines; line++) {
@@ -856,11 +878,55 @@ namespace Td {
 				int n_pages = (int)page_breaks.length() + 1;
 				print ("%u pages\n", n_pages);
 				printop.set_n_pages(n_pages);
-
 			});
 
-			printop.draw_page.connect( (context) => {
-				print ("Drawing page\n");
+
+			printop.draw_page.connect( (context, page_nr) => {
+				print ("Drawing page: %u\n", page_nr);
+
+				int start = 0;
+
+				if (page_nr != 0){
+					start = page_breaks.nth_data(page_nr - 1);
+				}
+				int end;
+				if (page_nr < page_breaks.length()) {
+					end = page_breaks.nth_data(page_nr);
+				}
+				else {
+					end = layout.get_line_count();
+				}
+
+				print ("start: %u, end: %u\n", start, end);
+
+				Cairo.Context cr = context.get_cairo_context();
+				cr.set_source_rgb(0, 0, 0);
+
+				int i = 0;
+				double start_pos = 0;
+
+				Pango.LayoutIter iter = layout.get_iter();
+
+				while (true) {
+					if (i >= start){
+						
+						var line = iter.get_line();
+
+						Pango.Rectangle ink_rect, logical_rect;
+						iter.get_line_extents(out ink_rect, out logical_rect);
+						var baseline = iter.get_baseline();
+						if (i == start){
+							start_pos = logical_rect.y / 1024.0;
+						}
+						cr.move_to(logical_rect.x / 1024.0, baseline / 1024.0 - start_pos);
+						
+						Pango.cairo_show_layout_line(cr, line);
+					}
+					i++;
+					if (i >= end || iter.next_line() == false){
+						break;
+					}
+				}
 			});
 
 			try {

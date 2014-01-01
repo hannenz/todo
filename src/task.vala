@@ -141,6 +141,25 @@ namespace Td {
 		}
 
 		public void to_model(Gtk.ListStore model, Gtk.TreeIter? iter){
+			model.set(
+				iter,
+				Columns.PRIORITY, this.priority,
+				Columns.MARKUP, this.to_markup(),
+				Columns.TASK_OBJECT, this,
+				Columns.VISIBLE, true,
+				Columns.DONE, this.done
+			);
+
+			if (iter != null){
+				this.iter = iter;
+			}
+			else {
+				iter = this.iter;
+			}
+		}
+
+		public string to_markup() {
+			
 			string ctx = "";
 			foreach (string context in this.contexts){
 				ctx += context;
@@ -163,20 +182,8 @@ namespace Td {
 			if (this.done)
 				markup = "<s>" + markup + "</s>";
 
-			if (iter != null){
-				this.iter = iter;
-			}
-			else {
-				iter = this.iter;
-			}
-			model.set(
-				iter,
-				Columns.PRIORITY, this.priority,
-				Columns.MARKUP, markup,
-				Columns.TASK_OBJECT, this,
-				Columns.VISIBLE, true,
-				Columns.DONE, this.done
-			);
+
+			return markup;
 		}
 
 		/**
