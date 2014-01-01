@@ -7,6 +7,7 @@ namespace Td {
 		public Gtk.Toolbar toolbar;
 		public Gtk.ToolButton open_button;
 		public Gtk.ToolButton add_button;
+		public Gtk.ToolButton print_button;
 		public Granite.Widgets.SearchBar search_entry;
 		public Granite.Widgets.SourceList sidebar;
 		public Granite.Widgets.SourceList.ExpandableItem projects_category;
@@ -35,8 +36,10 @@ namespace Td {
 			toolbar = new Toolbar();
 			open_button = new ToolButton.from_stock(Gtk.Stock.OPEN);
 			add_button = new ToolButton.from_stock(Gtk.Stock.ADD);
+			print_button = new ToolButton.from_stock(Gtk.Stock.PRINT);
 			toolbar.insert(open_button, -1);
 			toolbar.insert(add_button, -1);
+			toolbar.insert(print_button, -1);
 			var right_sep = new Gtk.SeparatorToolItem ();
 			right_sep.draw = false;
 			right_sep.set_expand (true);

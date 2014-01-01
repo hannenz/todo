@@ -151,6 +151,7 @@ namespace Td {
 			/* On add button clicked, show add task dialog */
 			window.open_button.clicked.connect(open_file);
 			window.add_button.clicked.connect(add_task);
+			window.print_button.clicked.connect(print_todo_list);
 
 			/* Detect right click on tree view columns and show popup context menu (edit/ delete) */
 			window.tree_view.button_press_event.connect( (tv, event) => {
@@ -787,6 +788,9 @@ namespace Td {
 					var content = info_bar.get_content_area();
 					content.add(new Label(_("The todo.txt file has been modified and been re-read")));
 					info_bar.show_all();
+					window.info_bar_box.foreach( (widget) => {
+						widget.destroy();
+					});
 					window.info_bar_box.pack_start(info_bar, true, true, 0);
 					info_bar.response.connect( () => {
 						info_bar.destroy();
@@ -813,6 +817,58 @@ namespace Td {
 				return false;
 			}
 			return true;
+		}
+
+		void print_todo_list () {
+			Gtk.PrintOperation printop;
+
+			printop = new Gtk.PrintOperation();
+
+			printop.begin_print.connect( (context) => {
+
+				double width = context.get_width();
+				double height = context.get_height();
+
+				Pango.Layout layout = context.create_pango_layout();
+				layout.set_font_description(Pango.FontDescription.from_string("Sans 12"));
+				layout.set_width((int)width * Pango.SCALE);
+				layout.set_text("Hello, Print Test", 1);
+
+				int num_lines = layout.get_line_count();
+				var page_breaks = new List<int>();
+				double page_height = 0;
+
+				for (int line = 0; line < num_lines; line++) {
+					var layout_line = layout.get_line(line);
+					Pango.Rectangle ink_rect, logical_rect;
+					layout_line.get_extents(out ink_rect, out logical_rect);
+
+					double line_height = logical_rect.height / 1024.0;
+					page_height += line_height;
+
+					if (page_height + line_height > height) {
+						page_breaks.append(line);
+						page_height = 0;
+						page_height += line_height;
+					}
+				}
+
+				int n_pages = (int)page_breaks.length() + 1;
+				print ("%u pages\n", n_pages);
+				printop.set_n_pages(n_pages);
+
+			});
+
+			printop.draw_page.connect( (context) => {
+				print ("Drawing page\n");
+			});
+
+			try {
+				printop.run(Gtk.PrintOperationAction.PRINT_DIALOG, window);
+			}
+			catch (Error e) {
+				warning("%s", e.message);
+			}
 		}
 	}
 }
