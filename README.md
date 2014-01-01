@@ -13,7 +13,7 @@ $ cmake -DCMAKE_INSTALL_PREFIX=/usr/ ../
 $ make
 # make install
 ```
-## Use
+## Usage
 
 After `todo` has been properly installed it is available from the applications menu (`slingshot`). Alternatively launch todo from the command line. Open up a terminal window and type
 
