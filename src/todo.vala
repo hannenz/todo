@@ -876,7 +876,7 @@ namespace Td {
 			double height = context.get_height();
 
 			layout = context.create_pango_layout();
-			layout.set_font_description(Pango.FontDescription.from_string("Sans 12"));
+			layout.set_font_description(Pango.FontDescription.from_string("Sans 22"));
 			layout.set_width((int)(width * Pango.SCALE));
 			layout.set_markup(text, -1);
 
@@ -949,8 +949,8 @@ namespace Td {
 		protected void on_end_print(PrintContext context) {
 
 			window.statusbar.push(0, _("Printing has been finished"));
-			/* TODO: Cleanup ? */
-			return;
+			layout.unref();
+			
 		}
 	}
 }
