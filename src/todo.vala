@@ -626,6 +626,8 @@ namespace Td {
 				tasks_model_filter.refilter();
 				todo_file.lines[task.linenr - 1] = task.to_string();
 				todo_file.write_file();
+
+				update_global_tags();
 			}
 		}
 
@@ -716,6 +718,8 @@ namespace Td {
 					undelete();
 					info_bar.destroy();
 				});
+
+				update_global_tags();
 			}
 		}
 
@@ -826,7 +830,7 @@ namespace Td {
 			return true;
 		}
 
-		void print_todo_list () {
+		protected void print_todo_list () {
 
 			printop = new Gtk.PrintOperation();
 
@@ -839,6 +843,7 @@ namespace Td {
 
 			printop.begin_print.connect(this.on_begin_print);
 			printop.draw_page.connect(this.on_draw_page);
+			printop.end_print.connect(this.on_end_print);
 
 			try {
 				printop.run(Gtk.PrintOperationAction.PRINT_DIALOG, window);
@@ -848,7 +853,7 @@ namespace Td {
 			}
 		}
 
-		public void on_begin_print(PrintContext context) {
+		protected void on_begin_print(PrintContext context) {
 
 			string text = "";
 			bool show_completed = settings.get_boolean("show-completed");
@@ -866,8 +871,6 @@ namespace Td {
 
 				return false;
 			});
-
-			print ("%s\n", text);
 
 			double width = context.get_width();
 			double height = context.get_height();
@@ -897,26 +900,18 @@ namespace Td {
 				}
 			}
 
-			print ("%u lines\n", num_lines);
-			page_breaks.foreach( (line) => {
-				print ("Page break at line: %u\n", line);
-			});
-
 			int n_pages = (int)page_breaks.length() + 1;
-			print ("%u pages\n------------------------------------\n", n_pages);
 			printop.set_n_pages(n_pages);
 		}
 
-		public void on_draw_page(PrintContext context, int page_nr) {
-			print ("Drawing page: %u\n", page_nr);
+		protected void on_draw_page(PrintContext context, int page_nr) {
 
-			int start = 0;
+			int start = 0, end, i = 0;
+			double start_pos = 0;
 
 			if (page_nr != 0){
 				start = page_breaks.nth_data(page_nr - 1);
 			}
-			int end;
-
 			if (page_nr < page_breaks.length()) {
 				end = page_breaks.nth_data(page_nr);
 			}
@@ -924,13 +919,8 @@ namespace Td {
 				end = layout.get_line_count();
 			}
 
-			print ("start: %u, end: %u\n", start, end);
-
 			Cairo.Context cr = context.get_cairo_context();
 			cr.set_source_rgb(0, 0, 0);
-
-			int i = 0;
-			double start_pos = 0;
 
 			Pango.LayoutIter iter = layout.get_iter();
 
@@ -954,6 +944,13 @@ namespace Td {
 					break;
 				}
 			}
+		}
+
+		protected void on_end_print(PrintContext context) {
+
+			window.statusbar.push(0, _("Printing has been finished"));
+			/* TODO: Cleanup ? */
+			return;
 		}
 	}
 }
