@@ -873,7 +873,7 @@ namespace Td {
 			double height = context.get_height();
 
 			layout = context.create_pango_layout();
-			layout.set_font_description(Pango.FontDescription.from_string("Sans 22"));
+			layout.set_font_description(Pango.FontDescription.from_string("Sans 12"));
 			layout.set_width((int)(width * Pango.SCALE));
 			layout.set_markup(text, -1);
 
@@ -937,7 +937,7 @@ namespace Td {
 			while (true) {
 				if (i >= start){
 					
-					Pango.LayoutLine line = iter.get_line();
+					Pango.LayoutLine line = iter.get_line_readonly();
 
 					Pango.Rectangle ink_rect, logical_rect;
 					iter.get_line_extents(out ink_rect, out logical_rect);
