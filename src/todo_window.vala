@@ -54,6 +54,9 @@ namespace Td {
 
 			/* Create sidebar */
 			sidebar = new Granite.Widgets.SourceList();
+			sidebar.set_sort_func( (a, b) => {
+					return a.name > b.name ? 1 : -1;
+				});
 			projects_category = new Granite.Widgets.SourceList.ExpandableItem(_("Projects"));
 			contexts_category = new Granite.Widgets.SourceList.ExpandableItem(_("Contexts"));
 			var clear_category = new Granite.Widgets.SourceList.Item(_("All"));

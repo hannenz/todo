@@ -182,6 +182,7 @@ namespace Td {
 			window.sidebar.item_selected.connect( (item) => {
 
 				string item_name = item.get_data("item-name");
+
 				if (item_name == "clear"){
 					context_filter = "";
 					project_filter = "";
@@ -482,6 +483,8 @@ namespace Td {
 			var projects = new List<string>();
 			var contexts = new List<string>();
 
+			var selected = window.sidebar.selected;
+
 			window.projects_category.clear();
 			window.contexts_category.clear();
 
@@ -552,6 +555,7 @@ namespace Td {
 				}
 				window.projects_category.add(item);
 			}
+			window.sidebar.selected = selected;
 		}
 
 
@@ -593,13 +597,13 @@ namespace Td {
 			return false;
 		}
 
+
 		private Task get_selected_task(){
 			TreeIter iter;
-			Gtk.TreeModel model;
+			TreeModel model;
 			Task task = null;
 			var sel = window.tree_view.get_selection();
-
-			if (sel.get_selected(out model, out iter) == true){
+			if (sel.get_selected(out model, out iter)){
 				model.get(iter, Columns.TASK_OBJECT, out task, -1);
 			}
 			return task;
@@ -632,7 +636,14 @@ namespace Td {
 		}
 
 		private void edit_task () {
-			Task task = get_selected_task();
+			TreeIter iter;
+			TreeModel model;
+			Task task;
+			var sel = window.tree_view.get_selection();
+			if (!sel.get_selected(out model, out iter)){
+				return;
+			}
+			model.get(iter, Columns.TASK_OBJECT, out task, -1);
 
 			if (task != null){
 
@@ -655,6 +666,8 @@ namespace Td {
 				}
 				update_global_tags();
 				dialog.destroy();
+
+				sel.select_iter(iter);
 			}
 		}
 
@@ -673,7 +686,11 @@ namespace Td {
 						TreeIter iter;
 						tasks_list_store.append(out iter);
 						task.to_model(tasks_list_store, iter);
-						tasks_model_filter.refilter();
+
+						var sel = window.tree_view.get_selection();
+						sel.select_iter(task.iter);
+
+						//tasks_model_filter.refilter();
 						if (todo_file.write_file()){
 							debug ("File has been successfully written");
 						}
@@ -681,19 +698,18 @@ namespace Td {
 							debug ("Failed to write file");
 						}
 					}
+					// update global projects and contexts
+					update_global_tags();
 					break;
 				default:
 					break;
 			}
-			// update global projects and contexts
-			update_global_tags();
 			dialog.destroy();
 		}
 
 		private void delete_task () {
 
 			Task task = get_selected_task ();
-
 			
 			if (task != null) {
 
