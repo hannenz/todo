@@ -484,6 +484,7 @@ namespace Td {
 			var contexts = new List<string>();
 
 			var selected = window.sidebar.selected;
+			print ("Remembering item: %s\n", selected.name);
 
 			window.projects_category.clear();
 			window.contexts_category.clear();
@@ -555,7 +556,8 @@ namespace Td {
 				}
 				window.projects_category.add(item);
 			}
-			window.sidebar.selected = selected;
+			print ("Reselecting item: %s\n", selected.name);
+			window.sidebar.set("selected", selected);
 		}
 
 
