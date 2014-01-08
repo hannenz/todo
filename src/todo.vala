@@ -671,24 +671,26 @@ namespace Td {
 			}
 		}
 
-
 		private void add_task (){
+			
 			var dialog = add_edit_dialog();
 			dialog.show_all ();
 
 			int response = dialog.run ();
 			switch (response){
 				case Gtk.ResponseType.ACCEPT:
+
 					string str = dialog.entry.get_text();
 					Task task = new Task();
+
+
 					todo_file.lines.add(str);
 					if (task.parse_from_string(str)){
-						TreeIter iter;
+
+						TreeIter iter, fiter, siter;
+
 						tasks_list_store.append(out iter);
 						task.to_model(tasks_list_store, iter);
-
-						var sel = window.tree_view.get_selection();
-						sel.select_iter(task.iter);
 
 						//tasks_model_filter.refilter();
 						if (todo_file.write_file()){
@@ -697,14 +699,21 @@ namespace Td {
 						else {
 							debug ("Failed to write file");
 						}
+
+						update_global_tags();
+
+						tasks_model_filter.convert_child_iter_to_iter(out fiter, iter);
+						tasks_model_sort.convert_child_iter_to_iter(out siter, fiter);
+
+						window.tree_view.get_selection().select_iter(siter);
 					}
-					// update global projects and contexts
-					update_global_tags();
+
 					break;
 				default:
 					break;
 			}
 			dialog.destroy();
+
 		}
 
 		private void delete_task () {
