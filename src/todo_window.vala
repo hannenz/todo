@@ -103,7 +103,11 @@ namespace Td {
 			TreeView tv = new TreeView();
 			TreeViewColumn col;
 
-
+/*			col = new TreeViewColumn.with_attributes(_("Line Nr."), new CellRendererText(), "text", Columns.LINE_NR);
+			col.set_sort_column_id(Columns.LINE_NR);
+			col.resizable = true;
+			tv.append_column(col);
+*/
 			col = new TreeViewColumn.with_attributes(_("Priority"), new Granite.Widgets.CellRendererBadge(), "text", Columns.PRIORITY);
 			col.set_sort_column_id(Columns.PRIORITY);
 			col.resizable = true;

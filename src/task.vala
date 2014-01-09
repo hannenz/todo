@@ -141,13 +141,17 @@ namespace Td {
 		}
 
 		public void to_model(Gtk.ListStore model, Gtk.TreeIter? iter){
+
+			debug ("-- STORE IN MODEL: Line Nr.: %u\n", this.linenr);
+
 			model.set(
 				iter,
 				Columns.PRIORITY, this.priority,
 				Columns.MARKUP, this.to_markup(),
 				Columns.TASK_OBJECT, this,
 				Columns.VISIBLE, true,
-				Columns.DONE, this.done
+				Columns.DONE, this.done,
+				Columns.LINE_NR, this.linenr
 			);
 
 			if (iter != null){

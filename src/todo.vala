@@ -20,7 +20,8 @@ namespace Td {
 		MARKUP,
 		TASK_OBJECT,
 		VISIBLE,
-		DONE
+		DONE,
+		LINE_NR
 	}
 
 	/* Extend Granite.Application */
@@ -52,6 +53,7 @@ namespace Td {
 		private int window_width;
 		private int window_height;
 
+		private string current_filename = null;
 
 		/* Used for printing */
 		private Gtk.PrintOperation printop;
@@ -138,7 +140,7 @@ namespace Td {
 
 			/* Create and setup the data model, which
 			 * stores the tasks*/
-			tasks_list_store = new ListStore (5, typeof (string), typeof(string), typeof(GLib.Object), typeof(bool), typeof(bool));
+			tasks_list_store = new ListStore (6, typeof (string), typeof(string), typeof(GLib.Object), typeof(bool), typeof(bool), typeof(int));
 			setup_model();
 			// connect model and tree_view
 			window.tree_view.set_model(tasks_model_sort);
@@ -685,7 +687,6 @@ namespace Td {
 					string str = dialog.entry.get_text();
 					Task task = new Task();
 
-
 					todo_file.lines.add(str);
 					if (task.parse_from_string(str)){
 
@@ -697,6 +698,8 @@ namespace Td {
 						//tasks_model_filter.refilter();
 						if (todo_file.write_file()){
 							debug ("File has been successfully written");
+							task.linenr = todo_file.n_lines;
+							task.to_model(tasks_list_store, iter);
 						}
 						else {
 							debug ("Failed to write file");
@@ -784,9 +787,6 @@ namespace Td {
 			/* Always restore "empty" state before (re)reading the file */
 			reset();
 
-
-			//debug ("%s".printf(filename));
-
 			if (filename != null){
 				todo_file = new TodoFile(filename);
 			}
@@ -817,6 +817,8 @@ namespace Td {
 				// Switch to welcome mode!
 				return false;
 			}
+
+			this.current_filename = filename;
 
 			todo_file.monitor.changed.connect( (file, other_file, event) => {
 

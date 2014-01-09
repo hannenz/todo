@@ -11,6 +11,7 @@ namespace Td {
 		public FileMonitor monitor;
 		public int n_lines;
 
+
 		public TodoFile (string path) {
 			this.path = path;
 			this.file = File.new_for_path(path);
@@ -57,6 +58,7 @@ namespace Td {
 
 		public bool write_file(){
 			try {
+				n_lines = 0;
 
 				//monitor.cancel();
 
@@ -64,6 +66,7 @@ namespace Td {
 				var output_stream = new DataOutputStream(iostream.output_stream);
 				foreach (string line in lines){
 					output_stream.put_string(line + "\n");
+					n_lines++;
 				}
 				output_stream.close();
 				monitor = this.file.monitor(FileMonitorFlags.NONE, null);
