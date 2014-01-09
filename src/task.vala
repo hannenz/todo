@@ -142,8 +142,6 @@ namespace Td {
 
 		public void to_model(Gtk.ListStore model, Gtk.TreeIter? iter){
 
-			debug ("-- STORE IN MODEL: Line Nr.: %u\n", this.linenr);
-
 			model.set(
 				iter,
 				Columns.PRIORITY, this.priority,
