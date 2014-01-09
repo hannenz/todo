@@ -280,25 +280,6 @@ namespace Td {
 			tasks_model_filter.refilter();
 			update_global_tags();
 
-			bool flag = false;
-			if (selected_item != null){
-				foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
-					if (item.name == selected_item.name){
-						flag = true;
-						window.sidebar.selected = item;
-						break;
-					}
-				}
-				if (!flag){
-					foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
-						if (item.name == selected_item.name){
-							flag = true;
-							window.sidebar.selected = item;
-							break;
-						}
-					}
-				}
-			}
 		}
 
 		private void setup_menus () {
@@ -485,8 +466,7 @@ namespace Td {
 			var projects = new List<string>();
 			var contexts = new List<string>();
 
-			var selected = window.sidebar.selected;
-			print ("Remembering item: %s\n", selected.name);
+			var selected_item = window.sidebar.selected;
 
 			window.projects_category.clear();
 			window.contexts_category.clear();
@@ -558,9 +538,29 @@ namespace Td {
 				}
 				window.projects_category.add(item);
 			}
-			print ("Reselecting item: %s\n", selected.name);
-			window.sidebar.set("selected", selected);
-		}
+
+
+			bool flag = false;
+			foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
+				if (item.name == selected_item.name){
+					flag = true;
+					window.sidebar.selected = item;
+					break;
+				}
+			}
+			if (!flag){
+				foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
+					if (item.name == selected_item.name){
+						flag = true;
+						window.sidebar.selected = item;
+						break;
+					}
+				}
+			}
+
+/*			print ("Reselecting item: %s\n", selected.name);
+			window.sidebar.selected = selected;
+*/		}
 
 
 		private bool filter_function(TreeModel model, TreeIter iter){
@@ -697,12 +697,11 @@ namespace Td {
 
 						//tasks_model_filter.refilter();
 						if (todo_file.write_file()){
-							debug ("File has been successfully written");
 							task.linenr = todo_file.n_lines;
 							task.to_model(tasks_list_store, iter);
 						}
 						else {
-							debug ("Failed to write file");
+							warning ("Failed to write file");
 						}
 
 						update_global_tags();
