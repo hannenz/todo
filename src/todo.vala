@@ -687,8 +687,15 @@ namespace Td {
 					string str = dialog.entry.get_text();
 					Task task = new Task();
 
-					todo_file.lines.add(str);
 					if (task.parse_from_string(str)){
+
+						Date d = Date();
+						var output = new char[100];
+						d.set_time_t(time_t(null));
+						d.strftime(output, "%Y-%m-%d");
+						task.date = (string)output;
+
+						todo_file.lines.add(task.to_string());
 
 						TreeIter iter, fiter, siter;
 

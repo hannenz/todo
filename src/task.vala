@@ -27,7 +27,7 @@ namespace Td {
 
 		construct {
 			done = false;
-			date = "";
+			date = null;
 			completed_date = "";
 			due_date = "";
 			text = "";
@@ -127,6 +127,10 @@ namespace Td {
 				str += "(%s)".printf(this.priority);
 				str += " ";
 			}
+			if (this.date != null) {
+				str += this.date;
+				str += " ";
+			}
 			str += this.text;
 			str += " ";
 			foreach (string project in this.projects){
@@ -202,7 +206,11 @@ namespace Td {
 		 *									date string (default=30, pass <= 0 for default)
 		 * @return string 					The formatted date as string
 		 */
-		public string nice_date(string date_string, int max_days){
+		public string nice_date(string? date_string, int max_days){
+
+			if (date_string == null) {
+				return "";
+			}
 
 			if (max_days <= 0){
 				max_days = 30;
