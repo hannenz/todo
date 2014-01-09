@@ -485,8 +485,8 @@ namespace Td {
 			var projects = new List<string>();
 			var contexts = new List<string>();
 
-			var selected = window.sidebar.selected;
-			print ("Remembering item: %s\n", selected.name);
+			var selected_item = window.sidebar.selected;
+			print ("Remembering item: %s\n", selected_item.name);
 
 			window.projects_category.clear();
 			window.contexts_category.clear();
@@ -558,9 +558,29 @@ namespace Td {
 				}
 				window.projects_category.add(item);
 			}
-			print ("Reselecting item: %s\n", selected.name);
-			window.sidebar.set("selected", selected);
-		}
+
+
+			bool flag = false;
+			foreach (Granite.Widgets.SourceList.Item item in window.projects_category.children){
+				if (item.name == selected_item.name){
+					flag = true;
+					window.sidebar.selected = item;
+					break;
+				}
+			}
+			if (!flag){
+				foreach (Granite.Widgets.SourceList.Item item in window.contexts_category.children){
+					if (item.name == selected_item.name){
+						flag = true;
+						window.sidebar.selected = item;
+						break;
+					}
+				}
+			}
+
+/*			print ("Reselecting item: %s\n", selected.name);
+			window.sidebar.selected = selected;
+*/		}
 
 
 		private bool filter_function(TreeModel model, TreeIter iter){
