@@ -237,7 +237,19 @@ namespace Td {
 
 					int diff = d.days_between(now);
 					if (diff < max_days){
-						return "%u days ago".printf(diff);
+						string s = "";
+						switch (diff){
+							case 0:
+								s = _("Today");
+								break;
+							case 1:
+								s = _("Yesterday");
+								break;
+							default:
+								s = "%u %s".printf(diff, _("days ago"));
+								break;
+						}
+						return s;
 					}
 					else {
 						char buf[100];

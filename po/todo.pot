@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-26 11:38+0200\n"
+"POT-Creation-Date: 2014-01-10 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,74 +17,106 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/todo_window.vala:27
+#: src/todo_window.vala:31
 msgid "Add task"
 msgstr ""
 
-#: src/todo_window.vala:51
+#: src/todo_window.vala:62
 msgid "All"
 msgstr ""
 
-#: src/todo_window.vala:50
+#: src/task_dialog.vala:37 src/todo_window.vala:61
 msgid "Contexts"
 msgstr ""
 
-#: src/todo.vala:197
+#: src/todo.vala:331
 msgid "Delete task"
 msgstr ""
 
-#: src/todo_window.vala:88
+#: src/todo_window.vala:123
 msgid "Done"
 msgstr ""
 
-#: src/todo.vala:196
+#: src/todo.vala:330
 msgid "Edit task"
 msgstr ""
 
-#: src/todo_window.vala:29
+#: src/todo_window.vala:33
 msgid "Learn more about todo.txt"
 msgstr ""
 
-#: src/todo_window.vala:28
+#: src/todo.vala:339
+msgid "None"
+msgstr ""
+
+#: src/todo_window.vala:32
 msgid "Open file"
 msgstr ""
 
-#: src/todo_window.vala:93
+#: src/todo.vala:986
+msgid "Printing has been finished"
+msgstr ""
+
+#: src/task_dialog.vala:39 src/todo.vala:336 src/todo_window.vala:111
 msgid "Priority"
 msgstr ""
 
-#: src/todo_window.vala:49
+#: src/task_dialog.vala:35 src/todo_window.vala:60
 msgid "Projects"
 msgstr ""
 
-#: src/todo_window.vala:41
+#: src/todo_window.vala:49
 msgid "Search"
 msgstr ""
 
-#: src/todo.vala:255
+#: src/todo.vala:443
 msgid "Select your todo.txt file"
 msgstr ""
 
-#: src/todo_window.vala:27
+#: src/todo_window.vala:31
 msgid "Start a new todo.txt file by adding a task"
 msgstr ""
 
-#: src/todo_window.vala:98
+#: src/task_dialog.vala:33 src/todo_window.vala:116
 msgid "Task"
 msgstr ""
 
-#: src/todo_window.vala:26
+#: src/todo_window.vala:30
 msgid "The elementary todo.txt app"
 msgstr ""
 
-#: src/todo.vala:49
+#: src/todo.vala:745
+msgid "The task has been deleted"
+msgstr ""
+
+#: src/todo.vala:835
+msgid "The todo.txt file has been modified and been re-read"
+msgstr ""
+
+#: src/task.vala:243
+msgid "Today"
+msgstr ""
+
+#: src/todo.vala:77
 msgid "Todo.txt client for elementary OS"
 msgstr ""
 
-#: src/todo_window.vala:28
+#: src/todo.vala:332
+msgid "Toggle done"
+msgstr ""
+
+#: src/todo_window.vala:32
 msgid "Use an existing todo.txt file"
 msgstr ""
 
-#: src/todo_window.vala:29
+#: src/todo_window.vala:33
 msgid "What is a todo.txt file?"
+msgstr ""
+
+#: src/task.vala:246
+msgid "Yesterday"
+msgstr ""
+
+#: src/task.vala:249
+msgid "days ago"
 msgstr ""

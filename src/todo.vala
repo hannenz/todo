@@ -275,7 +275,7 @@ namespace Td {
 
 		private void toggle_show_completed(){
 
-			Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
+			//Granite.Widgets.SourceList.Item selected_item = window.sidebar.selected;
 
 			tasks_model_filter.refilter();
 			update_global_tags();
