@@ -338,7 +338,7 @@ namespace Td {
 
 			var priority_none_menu_item = new Gtk.MenuItem.with_label(_("None"));
 			priority_menu.append(priority_none_menu_item);
-			priority_none_menu_item.add_accelerator("activate", accel_group, Gdk.Key.BackSpace, 0, Gtk.AccelFlags.VISIBLE);
+			priority_none_menu_item.add_accelerator("activate", accel_group, Gdk.Key.BackSpace, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 			priority_none_menu_item.activate.connect ( () => {
 				Task task = get_selected_task ();
 				if (task != null){
@@ -349,7 +349,7 @@ namespace Td {
 
 			for (char prio = 'A'; prio <= 'F'; prio++){
 				var priority_x_menu_item = new Gtk.MenuItem.with_label("%c".printf(prio));
-				priority_x_menu_item.add_accelerator("activate", accel_group, Gdk.Key.A + (prio - 'A'), 0, Gtk.AccelFlags.VISIBLE);
+				priority_x_menu_item.add_accelerator("activate", accel_group, Gdk.Key.A + (prio - 'A'), Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE);
 				priority_x_menu_item.activate.connect( (menu_item) => {
 
 					Task task = get_selected_task();
