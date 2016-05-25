@@ -22,7 +22,7 @@ set (GETTEXT_PACKAGE "todo")
 find_package(PkgConfig)
 
 # now let's actually check for the required dependencies
-pkg_check_modules(DEPS REQUIRED gtk+-3.0 granite gee-1.0)
+pkg_check_modules(DEPS REQUIRED gtk+-3.0 granite gee-0.8)
 add_definitions(${DEPS_CFLAGS})
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 link_libraries(${DEPS_LIBRARIES})
@@ -48,8 +48,8 @@ vala_precompile(VALA_C ${EXEC_NAME}
 	src/task_dialog.vala
 PACKAGES
 	gtk+-3.0
+	gee-0.8
 	granite
-	gee-1.0
 	posix
 OPTIONS
 	-X -DGETTEXT_PACKAGE="todo"

@@ -40,7 +40,7 @@ namespace Td {
 		private Gtk.Menu popup_menu;
 
 		/* Models and Lists */		
-		private ListStore tasks_list_store;
+		private Gtk.ListStore tasks_list_store;
 		private TreeModelFilter tasks_model_filter;
 		private TreeModelSort tasks_model_sort;
 
@@ -140,7 +140,7 @@ namespace Td {
 
 			/* Create and setup the data model, which
 			 * stores the tasks*/
-			tasks_list_store = new ListStore (6, typeof (string), typeof(string), typeof(GLib.Object), typeof(bool), typeof(bool), typeof(int));
+			tasks_list_store = new Gtk.ListStore (6, typeof (string), typeof(string), typeof(GLib.Object), typeof(bool), typeof(bool), typeof(int));
 			setup_model();
 			// connect model and tree_view
 			window.tree_view.set_model(tasks_model_sort);
